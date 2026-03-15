@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jkeenan-cv
+  namespace: jkeenan-cv
+  labels:
+    app: jkeenan-cv
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jkeenan-cv
+  template:
+    metadata:
+      labels:
+        app: jkeenan-cv
+    spec:
+      containers:
+        - name: jkeenan-cv
+          image: jkeenanacr.azurecr.io/jkeenan-cv:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5

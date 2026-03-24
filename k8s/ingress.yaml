@@ -5,9 +5,24 @@ metadata:
   namespace: jkeenan-cv
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
+  tls:
+    - hosts:
+        - jakeenan.com
+      secretName: jkeenan-cv-tls
   rules:
+    - host: jakeenan.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: jkeenan-cv
+                port:
+                  number: 80
     - http:
         paths:
           - path: /
